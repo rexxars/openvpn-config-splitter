@@ -1,8 +1,12 @@
 {
   "name": "openvpn-config-splitter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Splits OpenVPN (.ovpn) files into separate files for private key, user+ca certificates and tls-auth key, for use with network-manager in debian/ubuntu",
-  "author": "Espen Hovlandsdal <espen@hovlandsdal.com>",
+  "author": {
+    "name": "Espen Hovlandsdal",
+    "email": "espen@hovlandsdal.com",
+    "url": "http://rexxars.com"
+  },
   "license": "MIT",
   "preferGlobal": true,
   "bin": {
@@ -12,6 +16,9 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/rexxars/openvpn-config-splitter.git"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/tape test/*.test.js"
   },
   "keywords": [
     "openvpn",
@@ -29,5 +36,9 @@
     "argparse": "~0.1.15",
     "errno": "~0.1.0",
     "async": "~0.2.10"
+  },
+  "devDependencies": {
+    "tape": "~2.5.0",
+    "mock-fs": "~2.2.0"
   }
 }
