@@ -1,3 +1,5 @@
+[![Build Status][1]][2] [![dependency status][3]][4]
+
 openvpn-config-splitter
 =======================
 
@@ -74,3 +76,8 @@ fs.readFile(configPath + '/config.ovpn', function(err, originalConfig) {
     });
 });
 ```
+
+[1]: https://travis-ci.org/rexxars/openvpn-config-splitter.png
+[2]: https://travis-ci.org/rexxars/openvpn-config-splitter
+[3]: https://david-dm.org/rexxars/openvpn-config-splitter.png
+[4]: https://david-dm.org/rexxars/openvpn-config-splitter
