@@ -1,3 +1,5 @@
+'use strict';
+
 var fs   = require('fs'),
     test = require('tape'),
     mockfs   = require('mock-fs'),
@@ -34,7 +36,7 @@ test('splitter returns valid new config file', function(t) {
         t.equal(0, res.privateKey.indexOf('-----BEGIN RSA PRIVATE KEY-----'), 'privateKey should start with signature');
         t.equal(32, res.privateKey.indexOf('privateKey'), 'privateKey should contain our inserted string');
 
-        t.equal(0, res.tlsAuth.indexOf("#\n# 2048 bit OpenVPN static key (Server Agent)"), 'tlsAuth should start with signature');
+        t.equal(0, res.tlsAuth.indexOf('#\n# 2048 bit OpenVPN static key (Server Agent)'), 'tlsAuth should start with signature');
         t.ok(res.tlsAuth.indexOf('db6ff2ffe2df7b8cfc0d9542bdce27dc') > -1, 'tlsAuth should contain given string');
 
         t.ok(res.config.match(/^ca caCert\.test$/m), 'config should contain caCert entry');
@@ -69,7 +71,7 @@ test('splitter returns error if no recognized parts could be found in config', f
     t.plan(2);
 
     var dummy = ['# Blah', '<something>', 'moo', '</something>', 'foo'];
-    splitter.split(dummy.join("\n"), {}, function(err, res) {
+    splitter.split(dummy.join('\n'), {}, function(err, res) {
         t.ok(err, 'first argument should be an error');
         t.equal(undefined, res, 'results argument should be undefined');
     });
@@ -79,7 +81,7 @@ test('splitter extracts correct ca from config', function(t) {
     t.plan(4);
 
     var dummy = ['# Blah', '<ca>', 'correct-ca', '</ca>', 'foo'];
-    splitter.split(dummy.join("\n"), {}, function(err, res) {
+    splitter.split(dummy.join('\n'), {}, function(err, res) {
         t.error(err, 'should not give any errors on valid input');
         t.equal('correct-ca', res.caCert, 'should get correct ca from line-breaked string');
     });
@@ -94,7 +96,7 @@ test('splitter extracts correct user cert from config', function(t) {
     t.plan(4);
 
     var dummy = ['# Blah', '<cert>', 'correct-cert', '</cert>', 'foo'];
-    splitter.split(dummy.join("\n"), {}, function(err, res) {
+    splitter.split(dummy.join('\n'), {}, function(err, res) {
         t.error(err, 'should not give any errors on valid input');
         t.equal('correct-cert', res.userCert, 'should get correct cert from line-breaked string');
     });
@@ -110,7 +112,7 @@ test('splitter extracts correct private key from config', function(t) {
 
     var needle = 'some kind of key - the correct one, hopefully';
     var dummy = ['# Blah', '<key>', needle, '</key>', 'foo'];
-    splitter.split(dummy.join("\n"), {}, function(err, res) {
+    splitter.split(dummy.join('\n'), {}, function(err, res) {
         t.error(err, 'should not give any errors on valid input');
         t.equal(needle, res.privateKey, 'should get correct key from line-breaked string');
     });
@@ -126,7 +128,7 @@ test('splitter extracts correct tls auth key from config', function(t) {
 
     var needle = 'TEE TO THE ELL TO THE ESS';
     var dummy = ['# Blah', '<tls-auth>', needle, '</tls-auth>', 'foo'];
-    splitter.split(dummy.join("\n"), {}, function(err, res) {
+    splitter.split(dummy.join('\n'), {}, function(err, res) {
         t.error(err, 'should not give any errors on valid input');
         t.equal(needle, res.tlsAuth, 'should get correct tls key from line-breaked string');
     });
@@ -156,7 +158,7 @@ test('writer overwrites files if told to', function(t) {
         splitter.writeToFiles(parts, paths, true, function(err) {
             t.error(err, 'error argument should be empty');
 
-            for (key in contents) {
+            for (var key in contents) {
                 t.notEqual(
                     contents[key],
                     fs.readFileSync('/some/path/' + key, { encoding: 'utf8' }),
@@ -188,7 +190,7 @@ test('writer does not overwrite files by default', function(t) {
     splitter.split(config, paths, function(err, parts) {
         splitter.writeToFiles(parts, paths, function(err) {
             t.equal('EEXIST', err.code, 'error should have EEXIST code');
-            for (key in contents) {
+            for (var key in contents) {
                 t.equal(
                     contents[key],
                     fs.readFileSync('/some/path/' + key, { encoding: 'utf8' }),
