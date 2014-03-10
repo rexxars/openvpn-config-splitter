@@ -1,6 +1,6 @@
 {
   "name": "openvpn-config-splitter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Splits OpenVPN (.ovpn) files into separate files for private key, user+ca certificates and tls-auth key, for use with network-manager in debian/ubuntu",
   "author": {
     "name": "Espen Hovlandsdal",
