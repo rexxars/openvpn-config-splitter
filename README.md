@@ -8,7 +8,7 @@ Splits OpenVPN (.ovpn) files into separate files for private key, user+ca certif
 ## Installation
 openvpn-config-splitter can be installed using [npm](https://npmjs.org/):
 
-```
+```bash
 # NPM:
 npm install -g openvpn-config-splitter
 ```
@@ -16,7 +16,7 @@ npm install -g openvpn-config-splitter
 ## Usage
 
 ### As a CLI-tool
-```
+```bash
 # Install globally
 $ npm install -g openvpn-config-splitter
 
