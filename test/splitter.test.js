@@ -5,10 +5,9 @@ var test = require('tape')
 var mockfs = require('mock-fs')
 var splitter = require('../')
 
-var config = fs.readFileSync(
-  path.join(__dirname, 'fixtures', 'example.ovpn'),
-  {encoding: 'utf8'}
-)
+var readOpts = {encoding: 'utf8'}
+var config = fs.readFileSync(path.join(__dirname, 'fixtures', 'example.ovpn'), readOpts)
+var altConfig = fs.readFileSync(path.join(__dirname, 'fixtures', 'alternative.ovpn'), readOpts)
 
 var filenames = {
   caCert: 'caCert.test',
@@ -37,6 +36,38 @@ test('splitter returns valid new config file', function (t) {
     t.equal(32, res.privateKey.indexOf('privateKey'), 'privateKey should contain our inserted string')
 
     t.equal(0, res.tlsAuth.indexOf('#\n# 2048 bit OpenVPN static key (Server Agent)'), 'tlsAuth should start with signature')
+    t.ok(res.tlsAuth.indexOf('db6ff2ffe2df7b8cfc0d9542bdce27dc') > -1, 'tlsAuth should contain given string')
+
+    t.ok(res.config.match(/^ca caCert\.test$/m), 'config should contain caCert entry')
+    t.ok(res.config.match(/^cert userCert\.test$/m), 'config should contain userCert entry')
+    t.ok(res.config.match(/^key privateKey\.test$/m), 'config should contain privateKey entry')
+    t.ok(res.config.match(/^tls-auth tlsAuth\.test/m), 'config should contain tlsAuth entry')
+    t.ok(res.config.match(/^tls-auth tlsAuth\.test 1$/m), 'tlsAuth entry should end with correct key direction')
+
+    t.end()
+  })
+})
+
+test('splitter returns valid new config file for alt syntax', function (t) {
+
+  splitter.split(altConfig, filenames, function (err, res) {
+    t.error(err, 'should not error')
+
+    t.equal(573, res.caCert.length, 'caCert should have expected length')
+    t.equal(573, res.userCert.length, 'userCert should have expected length')
+    t.equal(581, res.privateKey.length, 'privateKey should have expected length')
+    t.equal(601, res.tlsAuth.length, 'tlsAuth should have expected length')
+
+    t.equal(0, res.caCert.indexOf('-----BEGIN CERTIFICATE-----'), 'caCert should start with signature')
+    t.equal(28, res.caCert.indexOf('caCert'), 'caCert should contain our inserted string')
+
+    t.equal(0, res.userCert.indexOf('-----BEGIN CERTIFICATE-----'), 'userCert should start with signature')
+    t.equal(28, res.userCert.indexOf('userCert'), 'userCert should contain our inserted string')
+
+    t.equal(0, res.privateKey.indexOf('-----BEGIN RSA PRIVATE KEY-----'), 'privateKey should start with signature')
+    t.equal(32, res.privateKey.indexOf('privateKey'), 'privateKey should contain our inserted string')
+
+    t.equal(0, res.tlsAuth.indexOf('-----BEGIN OpenVPN Static key V1-----'))
     t.ok(res.tlsAuth.indexOf('db6ff2ffe2df7b8cfc0d9542bdce27dc') > -1, 'tlsAuth should contain given string')
 
     t.ok(res.config.match(/^ca caCert\.test$/m), 'config should contain caCert entry')
