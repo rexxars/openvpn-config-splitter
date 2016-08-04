@@ -18,7 +18,8 @@
     "url": "git://github.com/rexxars/openvpn-config-splitter.git"
   },
   "scripts": {
-    "test": "./node_modules/.bin/tape test/*.test.js"
+    "test": "./node_modules/.bin/tape test/*.test.js",
+    "posttest": "eslint ."
   },
   "keywords": [
     "openvpn",
@@ -33,12 +34,14 @@
     "url": "https://github.com/rexxars/openvpn-config-splitter/issues"
   },
   "dependencies": {
-    "argparse": "~0.1.15",
-    "errno": "~0.1.0",
-    "async": "~0.2.10"
+    "argparse": "^1.0.7",
+    "async": "^2.0.1",
+    "errno": "^0.1.4"
   },
   "devDependencies": {
-    "tape": "~2.5.0",
-    "mock-fs": "~2.2.0"
+    "eslint": "^3.2.2",
+    "eslint-config-bengler": "^1.1.3",
+    "mock-fs": "^3.11.0",
+    "tape": "^4.6.0"
   }
 }
